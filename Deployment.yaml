@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8-jvisualvm-poc
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8-jvisualvm-poc
+  template:
+    metadata:
+      labels:
+        app: k8-jvisualvm-poc
+    spec:
+      containers:
+      - name: k8-jvisualvm-poc
+        image: chinthaka316/k8-jvisualvm-poc:latest
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        imagePullPolicy: Always
+        env:
+          ## This is the environment property which we use to inject all the required JMX related system properties
+        - name: JAVA_TOOL_OPTIONS
+          value: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.rmi.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1
+
+
